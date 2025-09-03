@@ -153,7 +153,7 @@ function showUserDashboard(username) {
   document.getElementById('user-avatar-top').src = `https://minotar.net/avatar/${username}/60`;
   
   const coins = localStorage.getItem("coins_" + username) || "0";
-  document.getElementById('display-coins-top').innerHTML = `<span class="coin-animation">${coins} 💰</span>`;
+  document.getElementById('display-coins-top').innerHTML = `<span class="coin-animation">${coins} 🪙</span>`;
   
   playMinecraftSound('success');
 }
@@ -165,7 +165,7 @@ function showOwnerDashboard() {
   document.getElementById('owner-dashboard').style.display = "block";
   
   const ownerCoins = localStorage.getItem("coins_malifromtorino") || "1000";
-  document.getElementById('display-coins-top-owner').innerHTML = `<span class="coin-animation">${ownerCoins} 💰</span>`;
+  document.getElementById('display-coins-top-owner').innerHTML = `<span class="coin-animation">${ownerCoins} 🪙</span>`;
 
   updateUsersTable();
   playMinecraftSound('success');
@@ -188,10 +188,10 @@ function updateUsersTable() {
         <td><img class="minecraft-avatar" src="https://minotar.net/avatar/${username}/60" alt="${username}"></td>
         <td>${username}</td>
         <td>${'•'.repeat(password.length)}</td>
-        <td><span class="coin-animation">${coins} 💰</span></td>
+        <td><span class="coin-animation">${coins} 🪙</span></td>
         <td>
-          <button class="minecraft-btn secondary" onclick="addCoins('${username}', 10)" title="Add 10 coins">+10 💰</button>
-          <button class="minecraft-btn secondary" onclick="removeCoins('${username}', 10)" title="Remove 10 coins">-10 💰</button>
+          <button class="minecraft-btn secondary" onclick="addCoins('${username}', 10)" title="Add 10 coins">+10 🪙</button>
+          <button class="minecraft-btn secondary" onclick="removeCoins('${username}', 10)" title="Remove 10 coins">-10 🪙</button>
           <button class="minecraft-btn danger" onclick="banUser('${username}')" title="Ban user">🔨 Ban</button>
         </td>
       `;
@@ -206,7 +206,7 @@ function addCoins(username, amount) {
   const coins = parseInt(localStorage.getItem("coins_" + username) || "0");
   localStorage.setItem("coins_" + username, coins + amount);
   updateUsersTable();
-  showMinecraftAlert(`💰 Added ${amount} coins to ${username}!`, "success");
+  showMinecraftAlert(`🪙 Added ${amount} coins to ${username}!`, "success");
   playMinecraftSound('coin');
 }
 
@@ -216,7 +216,7 @@ function removeCoins(username, amount) {
   coins = Math.max(0, coins - amount); // Can't go negative
   localStorage.setItem("coins_" + username, coins);
   updateUsersTable();
-  showMinecraftAlert(`💸 Removed ${amount} coins from ${username}!`, "warning");
+  showMinecraftAlert(`🪙 Removed ${amount} coins from ${username}!`, "warning");
   playMinecraftSound('break');
 }
 
@@ -329,9 +329,9 @@ document.addEventListener('keydown', function(event) {
       localStorage.setItem("coins_" + currentUser, currentCoins + 1000);
       
       if (currentUser === "malifromtorino") {
-        document.getElementById('display-coins-top-owner').innerHTML = `<span class="coin-animation">${currentCoins + 1000} 💰</span>`;
+        document.getElementById('display-coins-top-owner').innerHTML = `<span class="coin-animation">${currentCoins + 1000} 🪙</span>`;
       } else {
-        document.getElementById('display-coins-top').innerHTML = `<span class="coin-animation">${currentCoins + 1000} 💰</span>`;
+        document.getElementById('display-coins-top').innerHTML = `<span class="coin-animation">${currentCoins + 1000} 🪙</span>`;
       }
       
       showMinecraftAlert("🎉 Konami Code activated! +1000 coins!", "success");
