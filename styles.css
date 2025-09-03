@@ -207,7 +207,13 @@ body {
 
 .input-container {
   width: 100%;
-  max-width: 300px;
+  max-width: 400px;
+}
+
+@media (max-width: 480px) {
+  .input-container {
+    max-width: 280px;
+  }
 }
 
 .minecraft-label {
@@ -671,50 +677,555 @@ body {
   animation: diamondSparkle 3s ease-in-out infinite;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
+/* Rank System Styles */
+.player-rank {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.rank-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #FFD700;
+}
+
+.rank-name {
+  color: #FFD700;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Store Modal Styles */
+.store-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.store-modal.show {
+  display: flex;
+}
+
+.store-container {
+  background: rgba(0, 0, 0, 0.95);
+  border: 4px solid #8B4513;
+  width: 90%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: blockPlace 0.5s ease-out;
+}
+
+.store-header {
+  background: rgba(139, 69, 19, 0.9);
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid #654321;
+}
+
+.store-header h2 {
+  color: #FFD700;
+  font-size: 20px;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.store-close {
+  background: #DC143C;
+  color: white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.store-close:hover {
+  background: #FF6347;
+  transform: scale(1.1);
+}
+
+.store-content {
+  padding: 20px;
+}
+
+.rank-info {
+  background: rgba(47, 79, 47, 0.8);
+  padding: 15px;
+  border: 2px solid #556B2F;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.rank-info h3 {
+  color: #FFD700;
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+
+.rank-info p {
+  color: #90EE90;
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Store Tabs */
+.store-tabs {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #8B4513;
+}
+
+.store-tab {
+  background: rgba(139, 69, 19, 0.5);
+  color: #FFFFFF;
+  border: none;
+  padding: 12px 20px;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.store-tab.active {
+  background: rgba(139, 69, 19, 0.9);
+  color: #FFD700;
+  border-bottom: 3px solid #FFD700;
+}
+
+.store-tab:hover {
+  background: rgba(139, 69, 19, 0.7);
+}
+
+.store-tab-content {
+  display: none;
+}
+
+.store-tab-content.active {
+  display: block;
+}
+
+/* Rank Grid */
+.rank-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.rank-item {
+  background: rgba(47, 79, 47, 0.8);
+  border: 3px solid #556B2F;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.rank-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  animation: itemBounce 0.6s ease;
+}
+
+.rank-badge-large {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 15px;
+  border-radius: 50%;
+  border: 4px solid;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Rank Badge Colors and Images */
+.count-badge {
+  background: linear-gradient(45deg, #8B4513, #A0522D);
+  border-color: #654321;
+  position: relative;
+}
+
+.count-badge::after {
+  content: '🛡️';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+}
+
+.baron-badge {
+  background: linear-gradient(45deg, #4169E1, #6495ED);
+  border-color: #1E90FF;
+  position: relative;
+}
+
+.baron-badge::after {
+  content: '⚔️';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+}
+
+.duke-badge {
+  background: linear-gradient(45deg, #9932CC, #BA55D3);
+  border-color: #8A2BE2;
+  position: relative;
+  animation: diamondSparkle 2s ease-in-out infinite;
+}
+
+.duke-badge::after {
+  content: '🏰';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+}
+
+.archon-badge {
+  background: linear-gradient(45deg, #FF4500, #FF6347);
+  border-color: #DC143C;
+  position: relative;
+  animation: diamondSparkle 1.5s ease-in-out infinite;
+}
+
+.archon-badge::after {
+  content: '🔥';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+}
+
+.marquis-badge {
+  background: linear-gradient(45deg, #FFD700, #FFF8DC, #FFD700);
+  border-color: #B8860B;
+  position: relative;
+  animation: diamondSparkle 1s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.marquis-badge::after {
+  content: '👑';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+}
+
+.rank-item h4 {
+  color: #FFD700;
+  font-size: 16px;
+  margin: 0 0 10px 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.rank-price {
+  color: #90EE90;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 10px 0;
+}
+
+.rank-desc {
+  color: #FFFFFF;
+  font-size: 11px;
+  margin: 0 0 15px 0;
+  line-height: 1.4;
+}
+
+.rank-perks {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+  text-align: left;
+}
+
+.rank-perks li {
+  color: #87CEEB;
+  font-size: 10px;
+  padding: 2px 0;
+  line-height: 1.3;
+}
+
+/* Store Items Grid */
+.store-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.store-item {
+  background: rgba(47, 79, 47, 0.8);
+  border: 2px solid #556B2F;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.store-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.item-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.store-item h4 {
+  color: #FFD700;
+  font-size: 14px;
+  margin: 0 0 8px 0;
+}
+
+.item-price {
+  color: #90EE90;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 0 0 5px 0;
+}
+
+.rank-req {
+  color: #FFB6C1;
+  font-size: 10px;
+  margin: 0 0 15px 0;
+  font-style: italic;
+}
+
+.available {
+  background: #228B22;
+  color: #FFFFFF;
+  border: 2px solid #32CD32;
+}
+
+/* Enhanced Responsive Design */
+
+/* Desktop (1200px and above) */
+@media (min-width: 1200px) {
+  .minecraft-container {
+    max-width: 1000px;
+    padding: 40px;
+  }
+  
+  .minecraft-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+  }
+  
+  .minecraft-title h1 {
+    font-size: 32px;
+  }
+  
+  .player-header {
+    padding: 25px;
+  }
+}
+
+/* Laptop/Tablet (768px - 1199px) */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .minecraft-container {
+    max-width: 900px;
+    padding: 35px;
+  }
+  
+  .minecraft-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .minecraft-title h1 {
+    font-size: 30px;
+  }
+}
+
+/* Mobile Tablet (481px - 767px) */
+@media (min-width: 481px) and (max-width: 767px) {
+  .minecraft-container {
+    margin: 15px;
+    padding: 25px;
+    max-width: none;
+  }
+  
+  .minecraft-title h1 {
+    font-size: 26px;
+  }
+  
+  .minecraft-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  .player-header {
+    padding: 20px;
+    gap: 12px;
+  }
+  
+  .minecraft-settings {
+    right: 15px;
+    left: 15px;
+    width: auto;
+    top: 90px;
+  }
+  
+  .minecraft-input {
+    font-size: 14px;
+    padding: 12px;
+  }
+  
+  .minecraft-btn {
+    font-size: 13px;
+    padding: 10px 15px;
+  }
+}
+
+/* Mobile Phone (480px and below) */
+@media (max-width: 480px) {
   .minecraft-container {
     margin: 10px;
     padding: 20px;
   }
   
   .minecraft-title h1 {
+    font-size: 22px;
+  }
+  
+  .subtitle {
     font-size: 14px;
   }
   
   .minecraft-grid {
     grid-template-columns: 1fr;
+    gap: 15px;
   }
   
   .player-header {
     flex-direction: column;
     gap: 15px;
     text-align: center;
+    padding: 15px;
+  }
+  
+  .player-info {
+    gap: 10px;
+  }
+  
+  .minecraft-avatar {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .player-name {
+    font-size: 16px;
+  }
+  
+  .player-coins {
+    font-size: 12px;
+  }
+  
+  .player-level {
+    font-size: 10px;
   }
   
   .minecraft-settings {
     right: 10px;
     left: 10px;
     width: auto;
-  }
-  
-  .minecraft-table-container {
-    font-size: 5px;
-  }
-}
-
-@media (max-width: 480px) {
-  .minecraft-title h1 {
-    font-size: 22px;
-  }
-  
-  .minecraft-btn {
+    top: 70px;
     font-size: 12px;
-    padding: 8px 12px;
   }
   
   .minecraft-input {
     font-size: 12px;
+    padding: 10px 12px;
+  }
+  
+  .minecraft-btn {
+    font-size: 11px;
     padding: 8px 12px;
+  }
+  
+  .card-header {
+    font-size: 14px;
+  }
+  
+  .card-content p {
+    font-size: 12px;
+  }
+  
+  .minecraft-table th {
+    font-size: 10px;
+    padding: 8px 4px;
+  }
+  
+  .minecraft-table td {
+    font-size: 10px;
+    padding: 6px 4px;
+  }
+  
+  .minecraft-table .minecraft-avatar {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .store-container {
+    width: 95%;
+    max-height: 85vh;
+  }
+  
+  .store-header {
+    padding: 15px;
+  }
+  
+  .store-header h2 {
+    font-size: 16px;
+  }
+  
+  .rank-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .store-items-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .rank-badge-large {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .rank-badge-large::after {
+    font-size: 24px;
+  }
+  
+  .store-tabs {
+    flex-direction: column;
+    gap: 2px;
+  }
+  
+  .store-tab {
+    padding: 10px 15px;
+    font-size: 11px;
   }
 }

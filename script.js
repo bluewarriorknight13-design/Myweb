@@ -2,6 +2,38 @@
 
 let currentUser = "";
 
+// Rank system
+const ranks = {
+  count: { name: 'Count', price: 0, badge: 'count-badge', level: 1 },
+  baron: { name: 'Baron', price: 500, badge: 'baron-badge', level: 2 },
+  duke: { name: 'Duke', price: 1200, badge: 'duke-badge', level: 3 },
+  archon: { name: 'Archon', price: 2500, badge: 'archon-badge', level: 4 },
+  marquis: { name: 'Marquis', price: 5000, badge: 'marquis-badge', level: 5 }
+};
+
+const rankOrder = ['count', 'baron', 'duke', 'archon', 'marquis'];
+
+// Get user rank
+function getUserRank(username) {
+  return localStorage.getItem('rank_' + username) || 'count';
+}
+
+// Set user rank
+function setUserRank(username, rank) {
+  localStorage.setItem('rank_' + username, rank);
+}
+
+// Update rank display
+function updateRankDisplay(username, rankKey) {
+  const rank = ranks[rankKey];
+  if (document.getElementById('rank-name')) {
+    document.getElementById('rank-name').textContent = rank.name;
+  }
+  if (document.getElementById('rank-badge')) {
+    document.getElementById('rank-badge').className = `rank-badge ${rank.badge}`;
+  }
+}
+
 // Initialize particles and blocks on load
 document.addEventListener('DOMContentLoaded', function() {
   createMinecraftParticles();
@@ -108,6 +140,7 @@ function login() {
   } else {
     localStorage.setItem("user_" + username, password);
     localStorage.setItem("coins_" + username, "50"); // New users get starter coins
+    setUserRank(username, 'count'); // New users start as Count
     showMinecraftAlert("✅ Account created! Welcome to Alnership!", "success");
   }
   
@@ -155,6 +188,10 @@ function showUserDashboard(username) {
   const coins = localStorage.getItem("coins_" + username) || "0";
   document.getElementById('display-coins-top').innerHTML = `<span class="coin-animation">${coins} 🪙</span>`;
   
+  // Update rank display
+  const userRank = getUserRank(username);
+  updateRankDisplay(username, userRank);
+  
   playMinecraftSound('success');
 }
 
@@ -180,19 +217,24 @@ function updateUsersTable() {
     const key = localStorage.key(i);
     if (key && key.startsWith("user_")) {
       const username = key.replace("user_", "");
-      const password = localStorage.getItem(key);
       const coins = localStorage.getItem("coins_" + username) || "0";
+      const userRank = getUserRank(username);
+      const rankInfo = ranks[userRank];
       
       const row = document.createElement('tr');
       row.innerHTML = `
         <td><img class="minecraft-avatar" src="https://minotar.net/avatar/${username}/60" alt="${username}"></td>
         <td>${username}</td>
-        <td>${'•'.repeat(password.length)}</td>
+        <td>
+          <div class="rank-badge ${rankInfo.badge}" style="width: 20px; height: 20px; display: inline-block; margin-right: 5px;"></div>
+          ${rankInfo.name}
+        </td>
         <td><span class="coin-animation">${coins} 🪙</span></td>
         <td>
-          <button class="minecraft-btn secondary" onclick="addCoins('${username}', 10)" title="Add 10 coins">+10 🪙</button>
-          <button class="minecraft-btn secondary" onclick="removeCoins('${username}', 10)" title="Remove 10 coins">-10 🪙</button>
+          <button class="minecraft-btn secondary" onclick="addCoins('${username}', 100)" title="Add 100 coins">+100 🪙</button>
+          <button class="minecraft-btn secondary" onclick="removeCoins('${username}', 100)" title="Remove 100 coins">-100 🪙</button>
           <button class="minecraft-btn danger" onclick="banUser('${username}')" title="Ban user">🔨 Ban</button>
+          <button class="minecraft-btn primary" onclick="promoteUser('${username}')" title="Promote rank">⬆️ Promote</button>
         </td>
       `;
       
@@ -338,6 +380,168 @@ document.addEventListener('keydown', function(event) {
       playMinecraftSound('levelup');
     }
     konamiCode = [];
+  }
+});
+
+// Store Functions
+function openStore() {
+  const storeModal = document.getElementById('store-modal');
+  storeModal.classList.add('show');
+  
+  // Update store displays
+  if (currentUser) {
+    const userRank = getUserRank(currentUser);
+    const coins = localStorage.getItem('coins_' + currentUser) || '0';
+    
+    document.getElementById('current-rank-display').textContent = ranks[userRank].name;
+    document.getElementById('store-coins-display').textContent = coins + ' 🪙';
+    
+    updateStoreButtons();
+  }
+  
+  playMinecraftSound('click');
+}
+
+function closeStore() {
+  const storeModal = document.getElementById('store-modal');
+  storeModal.classList.remove('show');
+  playMinecraftSound('click');
+}
+
+function showStoreTab(tabName) {
+  // Hide all tabs
+  document.querySelectorAll('.store-tab-content').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  document.querySelectorAll('.store-tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  
+  // Show selected tab
+  document.getElementById(tabName + '-tab').classList.add('active');
+  event.target.classList.add('active');
+  
+  playMinecraftSound('click');
+}
+
+function updateStoreButtons() {
+  if (!currentUser) return;
+  
+  const userRank = getUserRank(currentUser);
+  const userCoins = parseInt(localStorage.getItem('coins_' + currentUser) || '0');
+  const currentRankLevel = ranks[userRank].level;
+  
+  // Update rank buttons
+  document.querySelectorAll('.rank-item').forEach(item => {
+    const rankKey = item.dataset.rank;
+    const rank = ranks[rankKey];
+    const button = item.querySelector('button');
+    
+    if (rank.level <= currentRankLevel) {
+      button.textContent = 'Owned';
+      button.disabled = true;
+      button.className = 'minecraft-btn secondary';
+    } else if (userCoins >= rank.price) {
+      button.disabled = false;
+      button.className = 'minecraft-btn primary';
+    } else {
+      button.disabled = true;
+      button.className = 'minecraft-btn secondary';
+    }
+  });
+}
+
+function buyRank(rankKey, price) {
+  if (!currentUser) return;
+  
+  const userCoins = parseInt(localStorage.getItem('coins_' + currentUser) || '0');
+  const currentRankLevel = ranks[getUserRank(currentUser)].level;
+  const targetRankLevel = ranks[rankKey].level;
+  
+  if (targetRankLevel <= currentRankLevel) {
+    showMinecraftAlert('❌ You already own this rank or higher!', 'error');
+    return;
+  }
+  
+  if (userCoins < price) {
+    showMinecraftAlert('❌ Not enough coins!', 'error');
+    return;
+  }
+  
+  // Purchase rank
+  localStorage.setItem('coins_' + currentUser, userCoins - price);
+  setUserRank(currentUser, rankKey);
+  
+  // Update displays
+  updateRankDisplay(currentUser, rankKey);
+  const newCoins = userCoins - price;
+  document.getElementById('display-coins-top').innerHTML = `<span class="coin-animation">${newCoins} 🪙</span>`;
+  document.getElementById('store-coins-display').textContent = newCoins + ' 🪙';
+  document.getElementById('current-rank-display').textContent = ranks[rankKey].name;
+  
+  updateStoreButtons();
+  
+  showMinecraftAlert(`🎉 Congratulations! You are now a ${ranks[rankKey].name}!`, 'success');
+  playMinecraftSound('levelup');
+}
+
+function buyItem(itemKey, price, requiredRank) {
+  if (!currentUser) return;
+  
+  const userCoins = parseInt(localStorage.getItem('coins_' + currentUser) || '0');
+  const userRank = getUserRank(currentUser);
+  const userRankLevel = ranks[userRank].level;
+  const requiredRankLevel = ranks[requiredRank].level;
+  
+  if (userRankLevel < requiredRankLevel) {
+    showMinecraftAlert(`❌ You need ${ranks[requiredRank].name} rank or higher!`, 'error');
+    return;
+  }
+  
+  if (userCoins < price) {
+    showMinecraftAlert('❌ Not enough coins!', 'error');
+    return;
+  }
+  
+  // Purchase item
+  localStorage.setItem('coins_' + currentUser, userCoins - price);
+  
+  // Add item to user's inventory (simplified)
+  const userItems = JSON.parse(localStorage.getItem('items_' + currentUser) || '[]');
+  userItems.push(itemKey);
+  localStorage.setItem('items_' + currentUser, JSON.stringify(userItems));
+  
+  // Update coin display
+  const newCoins = userCoins - price;
+  document.getElementById('display-coins-top').innerHTML = `<span class="coin-animation">${newCoins} 🪙</span>`;
+  document.getElementById('store-coins-display').textContent = newCoins + ' 🪙';
+  
+  showMinecraftAlert(`✅ Successfully purchased ${itemKey.replace('_', ' ')}!`, 'success');
+  playMinecraftSound('success');
+}
+
+// Owner Functions
+function promoteUser(username) {
+  if (currentUser !== 'malifromtorino') return;
+  
+  const currentRank = getUserRank(username);
+  const currentIndex = rankOrder.indexOf(currentRank);
+  
+  if (currentIndex < rankOrder.length - 1) {
+    const newRank = rankOrder[currentIndex + 1];
+    setUserRank(username, newRank);
+    updateUsersTable();
+    showMinecraftAlert(`⬆️ Promoted ${username} to ${ranks[newRank].name}!`, 'success');
+  } else {
+    showMinecraftAlert(`❌ ${username} is already at maximum rank!`, 'error');
+  }
+}
+
+// Close store when clicking outside
+document.addEventListener('click', function(event) {
+  const storeModal = document.getElementById('store-modal');
+  if (event.target === storeModal) {
+    closeStore();
   }
 });
 

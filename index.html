@@ -64,7 +64,10 @@
       <div class="player-details">
         <span id="display-user-top" class="player-name">Steve</span>
         <span id="display-coins-top" class="player-coins">0 🪙</span>
-        <div class="player-level">Level 1 ⭐</div>
+        <div id="player-rank" class="player-rank">
+          <img id="rank-badge" class="rank-badge" src="" alt="rank">
+          <span id="rank-name" class="rank-name">Count</span>
+        </div>
       </div>
     </div>
     <button class="minecraft-btn settings-btn" onclick="toggleSettings()">
@@ -74,11 +77,11 @@
 
   <!-- Server Features -->
   <div class="minecraft-grid">
-    <div class="minecraft-card shop-card">
-      <div class="card-header">🏪 Shop</div>
+    <div class="minecraft-card shop-card" onclick="openStore()">
+      <div class="card-header">🏪 Rank Store</div>
       <div class="card-content">
-        <p>Buy items, blocks, and tools!</p>
-        <div class="card-status coming-soon">Coming Soon</div>
+        <p>Buy ranks, tools, armor & commands!</p>
+        <div class="card-status available">Click to Open</div>
       </div>
     </div>
 
@@ -141,11 +144,11 @@
 
   <!-- Owner Features -->
   <div class="minecraft-grid">
-    <div class="minecraft-card shop-card">
-      <div class="card-header">🏪 Shop Management</div>
+    <div class="minecraft-card shop-card" onclick="openStore()">
+      <div class="card-header">🏪 Rank Store</div>
       <div class="card-content">
-        <p>Manage shop items and prices</p>
-        <div class="card-status coming-soon">Coming Soon</div>
+        <p>Manage ranks, tools, armor & commands</p>
+        <div class="card-status available">Click to Open</div>
       </div>
     </div>
 
@@ -175,7 +178,7 @@
           <tr>
             <th>🧑‍💼 Avatar</th>
             <th>📝 Username</th>
-            <th>🔒 Password</th>
+            <th>🏆 Rank</th>
             <th>🪙 Coins</th>
             <th>⚡ Actions</th>
           </tr>
@@ -195,6 +198,191 @@
         <button class="minecraft-btn secondary" onclick="changePassword()">Save</button>
       </div>
       <button class="minecraft-btn danger" onclick="logout()">🚪 Logout</button>
+    </div>
+  </div>
+</div>
+
+<!-- STORE MODAL -->
+<div id="store-modal" class="store-modal">
+  <div class="store-container">
+    <div class="store-header">
+      <h2>🏪 Minecraft Rank Store 🏪</h2>
+      <button class="store-close" onclick="closeStore()">✕</button>
+    </div>
+    
+    <div class="store-content">
+      <div class="rank-info">
+        <h3>Your Current Rank: <span id="current-rank-display">Count</span></h3>
+        <p>Coins: <span id="store-coins-display">0 🪙</span></p>
+      </div>
+      
+      <div class="store-tabs">
+        <button class="store-tab active" onclick="showStoreTab('ranks')">🏆 Ranks</button>
+        <button class="store-tab" onclick="showStoreTab('tools')">⚒️ Tools</button>
+        <button class="store-tab" onclick="showStoreTab('armor')">🛡️ Armor</button>
+        <button class="store-tab" onclick="showStoreTab('commands')">⚡ Commands</button>
+      </div>
+      
+      <!-- RANKS TAB -->
+      <div id="ranks-tab" class="store-tab-content active">
+        <div class="rank-grid">
+          <div class="rank-item" data-rank="count">
+            <div class="rank-badge-large count-badge"></div>
+            <h4>Count</h4>
+            <p class="rank-price">Free</p>
+            <p class="rank-desc">Basic rank for new players</p>
+            <ul class="rank-perks">
+              <li>✓ Basic chat</li>
+              <li>✓ /home command</li>
+              <li>✓ 1 home</li>
+            </ul>
+            <button class="minecraft-btn secondary" disabled>Current Rank</button>
+          </div>
+          
+          <div class="rank-item" data-rank="baron">
+            <div class="rank-badge-large baron-badge"></div>
+            <h4>Baron</h4>
+            <p class="rank-price">500 🪙</p>
+            <p class="rank-desc">Noble rank with extra perks</p>
+            <ul class="rank-perks">
+              <li>✓ All Count perks</li>
+              <li>✓ /kit baron</li>
+              <li>✓ 3 homes</li>
+              <li>✓ Colored chat</li>
+            </ul>
+            <button class="minecraft-btn primary" onclick="buyRank('baron', 500)">Buy Rank</button>
+          </div>
+          
+          <div class="rank-item" data-rank="duke">
+            <div class="rank-badge-large duke-badge"></div>
+            <h4>Duke</h4>
+            <p class="rank-price">1,200 🪙</p>
+            <p class="rank-desc">High nobility with great powers</p>
+            <ul class="rank-perks">
+              <li>✓ All Baron perks</li>
+              <li>✓ /kit duke</li>
+              <li>✓ 5 homes</li>
+              <li>✓ /fly command</li>
+              <li>✓ /heal command</li>
+            </ul>
+            <button class="minecraft-btn primary" onclick="buyRank('duke', 1200)">Buy Rank</button>
+          </div>
+          
+          <div class="rank-item" data-rank="archon">
+            <div class="rank-badge-large archon-badge"></div>
+            <h4>Archon</h4>
+            <p class="rank-price">2,500 🪙</p>
+            <p class="rank-desc">Ancient power with mystical abilities</p>
+            <ul class="rank-perks">
+              <li>✓ All Duke perks</li>
+              <li>✓ /kit archon</li>
+              <li>✓ 10 homes</li>
+              <li>✓ /god command</li>
+              <li>✓ /tp command</li>
+              <li>✓ WorldEdit access</li>
+            </ul>
+            <button class="minecraft-btn primary" onclick="buyRank('archon', 2500)">Buy Rank</button>
+          </div>
+          
+          <div class="rank-item" data-rank="marquis">
+            <div class="rank-badge-large marquis-badge"></div>
+            <h4>Marquis</h4>
+            <p class="rank-price">5,000 🪙</p>
+            <p class="rank-desc">Ultimate rank with supreme authority</p>
+            <ul class="rank-perks">
+              <li>✓ All Archon perks</li>
+              <li>✓ /kit marquis</li>
+              <li>✓ Unlimited homes</li>
+              <li>✓ /gamemode command</li>
+              <li>✓ /time & /weather</li>
+              <li>✓ Creative mode access</li>
+              <li>✓ VIP chat prefix</li>
+            </ul>
+            <button class="minecraft-btn primary" onclick="buyRank('marquis', 5000)">Buy Rank</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- TOOLS TAB -->
+      <div id="tools-tab" class="store-tab-content">
+        <div class="store-items-grid">
+          <div class="store-item">
+            <div class="item-icon">⛏️</div>
+            <h4>Diamond Pickaxe</h4>
+            <p class="item-price">200 🪙</p>
+            <p class="rank-req">Requires: Baron+</p>
+            <button class="minecraft-btn primary" onclick="buyItem('diamond_pickaxe', 200, 'baron')">Buy Tool</button>
+          </div>
+          <div class="store-item">
+            <div class="item-icon">🪓</div>
+            <h4>Netherite Axe</h4>
+            <p class="item-price">400 🪙</p>
+            <p class="rank-req">Requires: Duke+</p>
+            <button class="minecraft-btn primary" onclick="buyItem('netherite_axe', 400, 'duke')">Buy Tool</button>
+          </div>
+          <div class="store-item">
+            <div class="item-icon">🔱</div>
+            <h4>Trident</h4>
+            <p class="item-price">800 🪙</p>
+            <p class="rank-req">Requires: Archon+</p>
+            <button class="minecraft-btn primary" onclick="buyItem('trident', 800, 'archon')">Buy Tool</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ARMOR TAB -->
+      <div id="armor-tab" class="store-tab-content">
+        <div class="store-items-grid">
+          <div class="store-item">
+            <div class="item-icon">🛡️</div>
+            <h4>Diamond Armor Set</h4>
+            <p class="item-price">600 🪙</p>
+            <p class="rank-req">Requires: Baron+</p>
+            <button class="minecraft-btn primary" onclick="buyItem('diamond_armor', 600, 'baron')">Buy Armor</button>
+          </div>
+          <div class="store-item">
+            <div class="item-icon">🏹</div>
+            <h4>Netherite Armor Set</h4>
+            <p class="item-price">1000 🪙</p>
+            <p class="rank-req">Requires: Duke+</p>
+            <button class="minecraft-btn primary" onclick="buyItem('netherite_armor', 1000, 'duke')">Buy Armor</button>
+          </div>
+          <div class="store-item">
+            <div class="item-icon">✨</div>
+            <h4>Enchanted Elytra</h4>
+            <p class="item-price">1500 🪙</p>
+            <p class="rank-req">Requires: Archon+</p>
+            <button class="minecraft-btn primary" onclick="buyItem('elytra', 1500, 'archon')">Buy Armor</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- COMMANDS TAB -->
+      <div id="commands-tab" class="store-tab-content">
+        <div class="store-items-grid">
+          <div class="store-item">
+            <div class="item-icon">🏠</div>
+            <h4>Extra Home Slot</h4>
+            <p class="item-price">100 🪙</p>
+            <p class="rank-req">Any Rank</p>
+            <button class="minecraft-btn primary" onclick="buyItem('home_slot', 100, 'count')">Buy Slot</button>
+          </div>
+          <div class="store-item">
+            <div class="item-icon">⚡</div>
+            <h4>/speed Command</h4>
+            <p class="item-price">300 🪙</p>
+            <p class="rank-req">Requires: Duke+</p>
+            <button class="minecraft-btn primary" onclick="buyItem('speed_cmd', 300, 'duke')">Buy Command</button>
+          </div>
+          <div class="store-item">
+            <div class="item-icon">🔮</div>
+            <h4>/vanish Command</h4>
+            <p class="item-price">500 🪙</p>
+            <p class="rank-req">Requires: Marquis</p>
+            <button class="minecraft-btn primary" onclick="buyItem('vanish_cmd', 500, 'marquis')">Buy Command</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
