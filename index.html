@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎯 Alnership Minecraft Server</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Minecraft particles background -->
+<div class="minecraft-particles">
+  <div class="particle particle-dirt"></div>
+  <div class="particle particle-grass"></div>
+  <div class="particle particle-stone"></div>
+  <div class="particle particle-diamond"></div>
+</div>
+
+<!-- Floating Minecraft blocks -->
+<div class="floating-blocks">
+  <div class="minecraft-block grass-block"></div>
+  <div class="minecraft-block dirt-block"></div>
+  <div class="minecraft-block stone-block"></div>
+  <div class="minecraft-block diamond-block"></div>
+  <div class="minecraft-block emerald-block"></div>
+</div>
+
+<!-- LOGIN PAGE -->
+<div id="login-container" class="minecraft-container">
+  <div class="minecraft-title">
+    <h1>⛏️ Alnership Server ⛏️</h1>
+    <div class="subtitle">Enter the World</div>
+  </div>
+  
+  <div class="minecraft-form">
+    <div class="input-container">
+      <label class="minecraft-label">🧑‍💼 Username</label>
+      <input type="text" id="username" class="minecraft-input" placeholder="Steve123">
+    </div>
+    
+    <div class="input-container">
+      <label class="minecraft-label">🔒 Password</label>
+      <input type="password" id="password" class="minecraft-input" placeholder="•••••••">
+    </div>
+    
+    <button class="minecraft-btn primary" onclick="login()">
+      <span class="btn-icon">🚪</span> Join Server
+    </button>
+  </div>
+  
+  <div class="minecraft-warning">
+    <span class="warning-icon">⚠️</span>
+    <span>Keep your password safe! Connected to Alnership realm.</span>
+  </div>
+</div>
+
+<!-- USER DASHBOARD -->
+<div id="dashboard" class="minecraft-container" style="display:none;">
+  <!-- Player Info Header -->
+  <div class="player-header">
+    <div class="player-info">
+      <img id="user-avatar-top" class="minecraft-avatar" src="" alt="avatar">
+      <div class="player-details">
+        <span id="display-user-top" class="player-name">Steve</span>
+        <span id="display-coins-top" class="player-coins">0 💰</span>
+        <div class="player-level">Level 1 ⭐</div>
+      </div>
+    </div>
+    <button class="minecraft-btn settings-btn" onclick="toggleSettings()">
+      ⚙️
+    </button>
+  </div>
+
+  <!-- Server Features -->
+  <div class="minecraft-grid">
+    <div class="minecraft-card shop-card">
+      <div class="card-header">🏪 Shop</div>
+      <div class="card-content">
+        <p>Buy items, blocks, and tools!</p>
+        <div class="card-status coming-soon">Coming Soon</div>
+      </div>
+    </div>
+
+    <div class="minecraft-card server-card">
+      <div class="card-header">🌍 Server Info</div>
+      <div class="card-content">
+        <p>Join our Minecraft world</p>
+        <div class="card-status coming-soon">IP Coming Soon</div>
+      </div>
+    </div>
+
+    <div class="minecraft-card discord-card">
+      <div class="card-header">💬 Discord</div>
+      <div class="card-content">
+        <p>Chat with other players</p>
+        <div class="card-status coming-soon">Link Coming Soon</div>
+      </div>
+    </div>
+
+    <div class="minecraft-card stats-card">
+      <div class="card-header">📊 Your Stats</div>
+      <div class="card-content">
+        <div class="stat-item">⏰ Playtime: 0h</div>
+        <div class="stat-item">🏆 Achievements: 0</div>
+        <div class="stat-item">⚔️ PvP Wins: 0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Panel -->
+  <div id="settings-panel" class="minecraft-settings">
+    <div class="settings-header">⚙️ Settings</div>
+    <div class="settings-content">
+      <div class="setting-group">
+        <label class="minecraft-label">🔒 Change Password</label>
+        <input type="password" id="new-password" class="minecraft-input" placeholder="New Password">
+        <button class="minecraft-btn secondary" onclick="changePassword()">Save</button>
+      </div>
+      <button class="minecraft-btn danger" onclick="logout()">🚪 Logout</button>
+    </div>
+  </div>
+</div>
+
+<!-- OWNER DASHBOARD -->
+<div id="owner-dashboard" class="minecraft-container" style="display:none;">
+  <!-- Owner Header -->
+  <div class="player-header owner-header">
+    <div class="player-info">
+      <img id="owner-avatar-top" class="minecraft-avatar owner-avatar" src="https://minotar.net/avatar/malifromtorino/60" alt="avatar">
+      <div class="player-details">
+        <span id="display-user-top-owner" class="player-name">malifromtorino</span>
+        <span id="display-coins-top-owner" class="player-coins">0 💰</span>
+        <div class="player-level owner-badge">👑 Server Owner</div>
+      </div>
+    </div>
+    <button class="minecraft-btn settings-btn" onclick="toggleSettings()">
+      ⚙️
+    </button>
+  </div>
+
+  <!-- Owner Features -->
+  <div class="minecraft-grid">
+    <div class="minecraft-card shop-card">
+      <div class="card-header">🏪 Shop Management</div>
+      <div class="card-content">
+        <p>Manage shop items and prices</p>
+        <div class="card-status coming-soon">Coming Soon</div>
+      </div>
+    </div>
+
+    <div class="minecraft-card server-card">
+      <div class="card-header">🌍 Server Control</div>
+      <div class="card-content">
+        <p>Server status and settings</p>
+        <div class="card-status coming-soon">Panel Coming Soon</div>
+      </div>
+    </div>
+
+    <div class="minecraft-card discord-card">
+      <div class="card-header">💬 Community</div>
+      <div class="card-content">
+        <p>Discord integration</p>
+        <div class="card-status coming-soon">Setup Coming Soon</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Player Management -->
+  <div class="player-management">
+    <h2 class="section-title">👥 Player Management</h2>
+    <div id="users-table-container" class="minecraft-table-container">
+      <table class="minecraft-table">
+        <thead>
+          <tr>
+            <th>🧑‍💼 Avatar</th>
+            <th>📝 Username</th>
+            <th>🔒 Password</th>
+            <th>💰 Coins</th>
+            <th>⚡ Actions</th>
+          </tr>
+        </thead>
+        <tbody id="users-table"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Owner Settings Panel -->
+  <div id="settings-panel" class="minecraft-settings">
+    <div class="settings-header">⚙️ Owner Settings</div>
+    <div class="settings-content">
+      <div class="setting-group">
+        <label class="minecraft-label">🔒 Change Password</label>
+        <input type="password" id="new-password" class="minecraft-input" placeholder="New Password">
+        <button class="minecraft-btn secondary" onclick="changePassword()">Save</button>
+      </div>
+      <button class="minecraft-btn danger" onclick="logout()">🚪 Logout</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
